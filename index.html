@@ -69,18 +69,17 @@
   <section id="panel-pi" class="panel" role="tabpanel" aria-labelledby="tab-pi">
     <div class="intro">
       <h2>Digits of <em id="piName">&pi;</em>, as far as you care to go</h2>
-      <p>Every digit is computed here, in a background thread, with exact integer arithmetic &mdash;
-        nothing is fetched and there is no ceiling. A million places takes a second or two;
-        ten million takes a while longer. The only limit is your machine&rsquo;s memory.</p>
+      <p>Pick a constant and how many decimal places you want. A million places takes a second or two;
+        ten million takes a while longer.</p>
     </div>
 
     <div class="card controls">
       <div class="field">
         <span class="flabel">Constant</span>
         <div class="seg" role="group" aria-label="Constant" id="piConst">
-          <button type="button" data-c="pi" aria-pressed="true" title="pi — Chudnovsky series">&pi;</button>
-          <button type="button" data-c="e" aria-pressed="false" title="Euler's number — sum of 1/k!">e</button>
-          <button type="button" data-c="phi" aria-pressed="false" title="Golden ratio — (1 + √5) / 2">&phi;</button>
+          <button type="button" data-c="pi" aria-pressed="true" title="Pi">&pi;</button>
+          <button type="button" data-c="e" aria-pressed="false" title="Euler's number">e</button>
+          <button type="button" data-c="phi" aria-pressed="false" title="Golden ratio">&phi;</button>
           <button type="button" data-c="sqrt2" aria-pressed="false" title="Square root of two">&radic;2</button>
           <button type="button" data-c="sqrt3" aria-pressed="false" title="Square root of three">&radic;3</button>
         </div>
@@ -163,9 +162,8 @@
   <section id="panel-msq" class="panel" role="tabpanel" aria-labelledby="tab-msq" hidden>
     <div class="intro">
       <h2>Magic squares of <em>any</em> order</h2>
-      <p>Every row, column and both diagonals add to the same number. Each cell is computed from its
-        row and column on demand, so a million-by-million square costs no memory &mdash; and the
-        numbers are always there: the square opens zoomed in far enough to read them, whatever the order.</p>
+      <p>Every row, column and both diagonals add to the same number. Choose any size, from 3&times;3
+        to a million by a million, and zoom in to read the numbers.</p>
     </div>
 
     <div class="card controls">
@@ -353,8 +351,7 @@
   <section id="panel-big" class="panel" role="tabpanel" aria-labelledby="tab-big" hidden>
     <div class="intro">
       <h2>Exact numbers, <em>every last digit</em></h2>
-      <p>Factorials, Fibonacci numbers, powers and binomials computed exactly with arbitrary-precision
-        integers &mdash; no rounding, no scientific notation unless you ask for it, no upper limit.</p>
+      <p>Factorials, Fibonacci numbers, powers and more &mdash; every digit shown, with no rounding.</p>
     </div>
 
     <div class="card controls">
@@ -463,12 +460,8 @@
   </section>
 
   <footer class="foot">
-    <p>Everything here is computed in your browser. &pi; uses the Chudnovsky series with binary splitting,
-      e the factorial series, and the roots a Newton square root &mdash; all on <code>BigInt</code>, in a
-      background thread so the page never freezes. Magic squares use the Siamese method for odd
-      <code>n</code>, the complement pattern for <code>n &equiv; 0 (mod 4)</code> and Conway&rsquo;s LUX
-      method for <code>n &equiv; 2 (mod 4)</code>; every cell has a closed form, so nothing is stored.
-      Primes come from a segmented sieve, Miller&ndash;Rabin and Pollard&rsquo;s rho.</p>
+    <p>Maths Engine is an open-source website. Anyone can help improve it &mdash; suggest a change or add a
+      feature on GitHub: <a href="https://github.com/pnwadalkar/maths-explorer" target="_blank" rel="noopener">github.com/pnwadalkar/maths-explorer</a></p>
   </footer>
 </div>
 

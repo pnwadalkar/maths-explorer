@@ -391,5 +391,7 @@ input.invalid{border-color:var(--bad);box-shadow:0 0 0 4px color-mix(in srgb,var
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}}
 
 .foot{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;max-width:86ch}
+.foot a{color:var(--a1);font-weight:600;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+.foot a:hover{color:var(--a2)}
 
 @media (prefers-reduced-motion:reduce){*,*::after{transition:none!important;animation:none!important}}

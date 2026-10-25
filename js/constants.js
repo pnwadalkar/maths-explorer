@@ -12,7 +12,7 @@ function constantsWorker(){
   function tick(){
     leavesDone++;
     const f = leavesDone / leavesTotal;
-    if (f - lastPost >= 0.01){ lastPost = f; post("summing the Chudnovsky series", f * 0.4); }
+    if (f - lastPost >= 0.01){ lastPost = f; post("computing digits", f * 0.4); }
   }
   function bs(a, b){
     if (b - a === 1){
@@ -84,7 +84,7 @@ function constantsWorker(){
       post("dividing", 0.7);
       return ((P + Q) * one) / Q;
     }
-    post("Newton square root", 0.2);
+    post("computing digits", 0.2);
     if (c === "sqrt2") return isqrt(2n * one * one);
     if (c === "sqrt3") return isqrt(3n * one * one);
     if (c === "phi") return (one + isqrt(5n * one * one)) / 2n;
@@ -110,11 +110,11 @@ function constantsWorker(){
 
 /* ================= constants: the page ================= */
 const CONSTS = {
-  pi:    { sym: "π",  name: "π",  title: "pi",     how: "Chudnovsky series, binary splitting" },
-  e:     { sym: "e",  name: "e",  title: "e",      how: "Σ 1/k!, binary splitting" },
-  phi:   { sym: "φ",  name: "φ",  title: "phi",    how: "(1 + √5) / 2, Newton square root" },
-  sqrt2: { sym: "√2", name: "√2", title: "sqrt2",  how: "Newton square root" },
-  sqrt3: { sym: "√3", name: "√3", title: "sqrt3",  how: "Newton square root" }
+  pi:    { sym: "π",  name: "π",  title: "pi" },
+  e:     { sym: "e",  name: "e",  title: "e" },
+  phi:   { sym: "φ",  name: "φ",  title: "phi" },
+  sqrt2: { sym: "√2", name: "√2", title: "sqrt2" },
+  sqrt3: { sym: "√3", name: "√3", title: "sqrt3" }
 };
 const K = {
   c: "pi", digits: "", intPart: "3", ms: 0,
@@ -379,7 +379,6 @@ function renderConstPage(){
   statTiles($("piStats"), [
     ["Decimal places", fmt(n), "big"],
     ["Computed in", fmtMs(K.ms)],
-    ["Method", info.how],
     ["Digit sum", fmt(st.sum) + "<small>mean " + (st.sum / n).toFixed(4) + " (4.5 if uniform)</small>"],
     ["Last place", "#" + fmt(n) + " is " + K.digits[n - 1]]
   ]);

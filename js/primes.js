@@ -134,7 +134,7 @@ function primesWorker(){
           k += m;
         } while (k < r && g === 1n);
         r *= 2;
-        post("searching for a factor (Pollard rho, " + r.toLocaleString("en-US") + " steps)", null);
+        post("searching for a factor", null);
       } while (g === 1n);
       if (g === n){
         do { ys = (ys * ys + c) % n; g = gcd(x > ys ? x - ys : ys - x, n); } while (g === 1n);
@@ -375,7 +375,7 @@ async function buildUlam(){
       ["Density", (100 * res.count / U.N).toFixed(2) + "%<small>" + (expect ? "N / ln N predicts " + fmt(expect) : "1 / ln N ≈ " + (100 / Math.log(hi)).toFixed(2) + "% at the edge") + "</small>"],
       ["Twin prime pairs", fmt(res.twins)],
       ["Largest gap", fmt(res.gap) + (res.gap ? "<small>after " + fmt(res.gapAt) + "</small>" : "")],
-      ["Sieved in", fmtMs(res.ms)]
+      ["Drawn in", fmtMs(res.ms)]
     ]);
     $("ulamTitle").textContent = "Ulam spiral";
     $("ulamNote").textContent = fmt(side) + " × " + fmt(side) + " from " + fmt(start);
@@ -429,9 +429,9 @@ async function primeTool(op){
     if (op === "test"){
       html = res.prime
         ? '<div class="pt-verdict yes">Prime</div>' + head + '<div class="pt-num">'
-          + (res.proof === "deterministic" ? "Proven: Miller–Rabin with the first 13 prime bases is exact below 3.3 × 10²⁴."
-             : "Probable prime: passed " + res.rounds + " Miller–Rabin rounds — the chance a composite survives is below 4^−" + res.rounds + ".") + "</div>"
-        : '<div class="pt-verdict no">Not prime</div>' + head + (res.factor ? '<div class="pt-num">divisible by ' + res.factor + "</div>" : '<div class="pt-num">a Miller–Rabin witness proves it composite — try Factorise</div>');
+          + (res.proof === "deterministic" ? "Definitely prime."
+             : "Almost certainly prime — it passed " + res.rounds + " separate checks.") + "</div>"
+        : '<div class="pt-verdict no">Not prime</div>' + head + (res.factor ? '<div class="pt-num">divisible by ' + res.factor + "</div>" : '<div class="pt-num">try Factorise to see what it divides by</div>');
     } else if (op === "factor"){
       const f = res.factors;
       html = '<div class="pt-verdict ' + (f.length === 1 ? "yes" : "") + '">' + (f.length === 1 ? "Prime — it is its own only factor" : f.length + " prime factors") + "</div>"

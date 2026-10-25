@@ -59,13 +59,6 @@ const EXACT_ORDER = 94906265;          // largest n with n² ≤ 2^53
 const MSQ_KERNEL = "const LUX_PAT = " + JSON.stringify(LUX_PAT) + ";\n"
   + [siameseCell, doublyEvenCell, luxCell, cellAt, symCell, symCellBig].map(String).join("\n");
 
-function methodFor(n){
-  if (n === 1) return "trivial";
-  if (n % 2) return "Siamese method";
-  if (n % 4 === 0) return "complement pattern (n ≡ 0 mod 4)";
-  return "Conway’s LUX method (n ≡ 2 mod 4)";
-}
-
 /* The eight symmetries of the square are every combination of a transpose and two
    flips. Rotating or mirroring composes a new one; which one is found by probing a
    3 × 3 grid, which is enough to tell all eight apart. */
@@ -140,7 +133,7 @@ function msqCheckBody(){
       for (let c = 0; c < checks.length; c++){
         if (big(checks[c][0], checks[c][1], c * 0.25) !== S){ out.ok = false; out.scope = checks[c][1] + " is off"; return finish(); }
       }
-      out.scope = "both diagonals, row 1 and column 1 ✓, in exact BigInt arithmetic";
+      out.scope = "both diagonals, row 1 and column 1 ✓";
       return finish();
     }
     foldEvery = Math.max(1, Math.min(4096, Math.floor(9007199254740991 / (n * n))));
@@ -530,7 +523,7 @@ function msqSource(){
   return {
     kind: "msq", w: n, h: n, pad: 14, maxScale: 220,
     title: fmt(n) + " × " + fmt(n) + " magic square",
-    meta: msq.method + " · every line sums to " + fmt(msq.target),
+    meta: "every line sums to " + fmt(msq.target),
     filename: msqName("png"),
     paint(ctx, s, vis){ paintSquare(ctx, s, false, vis); },
     probe(x, y){
@@ -612,7 +605,7 @@ function buildSquare(){
   }
   notice.hidden = true;
 
-  msq.n = n; msq.ready = true; msq.method = methodFor(n);
+  msq.n = n; msq.ready = true;
   msq.target = magicConstant(); msq.sums.clear(); msq.hover = null; msq.pin = null;
   if (msq.posKey && !msq.posKey.startsWith(n + ":")){ msq.pos = null; msq.posKey = ""; }
   if (msq.trace && n * n > TRACE_MAX_CELLS){
@@ -642,8 +635,8 @@ function renderMsqStats(){
     ["Order", fmt(n) + " × " + fmt(n) + "<small>" + fmt(BigInt(n) * BigInt(n)) + " cells</small>"],
     ["Magic constant", fmt(msq.target), "big"],
     ["Numbers", (msq.step > 0 ? fmtDigits(lo) + " … " + fmtDigits(hi) : fmtDigits(hi) + " … " + fmtDigits(lo)) + (msq.step !== 1 ? "<small>step " + fmt(msq.step) + "</small>" : "")],
-    ["Construction", msq.method + "<small>" + variantName() + "</small>"],
-    ["Verified", c ? c.scope + "<small>" + fmtMs(c.ms) + " in the background</small>" : "checking…", c ? (c.ok ? "ok" : "bad") : ""],
+    ["View", variantName()],
+    ["Verified", c ? c.scope + "<small>checked in " + fmtMs(c.ms) + "</small>" : "checking…", c ? (c.ok ? "ok" : "bad") : ""],
     ["Associative", tri(c && c.assoc, "cells opposite the centre pair up")],
     ["Pandiagonal", tri(c && c.pandiag, "broken diagonals are magic too")]
   ]);
@@ -939,7 +932,7 @@ function msqHtmlDoc(){
     "<title>" + title + "</title>",
     "<style>" + css + "</style></head><body>",
     "<header><h1>" + title + "</h1>",
-    '<span class="meta">' + msq.method + " · " + variantName() + " · every line sums to " + fmt(msq.target) + "</span>",
+    '<span class="meta">' + variantName() + " · every line sums to " + fmt(msq.target) + "</span>",
     '<span class="tools">',
     '<span class="meta" id="zoom">—</span>',
     '<button id="out" title="Zoom out">−</button><button id="in" title="Zoom in">+</button>',
