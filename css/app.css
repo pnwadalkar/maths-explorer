@@ -162,7 +162,11 @@ code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);bo
 @media (max-width:520px){.theme-seg span{display:none}}
 
 /* ---- tool switcher ---- */
-.tools{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:26px}
+.tools{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:26px}
+@media (min-width:1001px){
+  .tools button{flex-direction:column;align-items:flex-start;gap:10px;padding:12px 13px}
+  .tlabel small{white-space:normal}
+}
 @media (max-width:1000px){
   .tools{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;
     margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
@@ -370,6 +374,33 @@ input.invalid{border-color:var(--bad);box-shadow:0 0 0 4px color-mix(in srgb,var
   border-radius:8px;padding:4px 9px;overflow-wrap:anywhere}
 .factors sup{font-size:10px;color:var(--accent);margin-left:1px}
 .factors .x{background:none;border:0;padding:0;color:var(--muted)}
+
+/* ---- number explorer ---- */
+.kinds{display:grid;gap:12px}
+.kind{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:start}
+.kind .tick{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;
+  background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--logo-ink)}
+.kind b{display:block;font-weight:600;font-size:14.5px}
+.kind span:not(.tick){display:block;color:var(--muted);font-size:13.5px;overflow-wrap:anywhere}
+.kinds-no{margin:4px 0 0;padding-top:12px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+.kinds-no span{font-weight:600;color:var(--muted)}
+.divs{max-height:220px;overflow:auto}
+.divs span{font-size:13px}
+.chips .surprise{font-family:var(--font-body);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.lede{color:var(--muted);font-size:14px;margin:-4px 0 14px;max-width:78ch}
+.chart{position:relative;height:300px;touch-action:pan-y}
+.chart canvas{position:absolute;inset:0;display:block}
+.tip{position:absolute;z-index:2;pointer-events:none;background:var(--surface-solid);border:1px solid var(--line-strong);
+  border-radius:var(--r-sm);padding:6px 10px;box-shadow:var(--shadow-lift);font-family:var(--font-mono);font-size:12px;white-space:nowrap}
+.tip b{display:block;font-weight:600;color:var(--fg)}
+.tip span{color:var(--muted)}
+
+/* ---- pascal's triangle ---- */
+.keys{display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.keys div{display:flex;align-items:center;gap:10px}
+.keys .sw{width:16px;height:16px;border-radius:5px;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.keys .ramp{gap:10px;color:var(--muted);font-size:12.5px}
+.keys .ramp i{flex:1 1 auto;height:12px;border-radius:6px}
 
 /* ---- full-screen viewer ---- */
 .viewer{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}

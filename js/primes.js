@@ -358,7 +358,7 @@ async function buildUlam(){
   if (!Number.isFinite(start) || start < 1){ $("ulamStart").classList.add("invalid"); toast("The centre number must be a positive whole number", true); return; }
   $("ulamSide").classList.remove("invalid"); $("ulamStart").classList.remove("invalid");
   if (side % 2 === 0){ side++; toast("Side rounded up to " + fmt(side) + " so the centre number sits in the middle cell"); }
-  if (start + side * side > Number.MAX_SAFE_INTEGER){ toast("That spiral would pass 2^53 — lower the centre number or the side", true); return; }
+  if (start + side * side > Number.MAX_SAFE_INTEGER){ toast("That spiral is too big — lower the centre number or the side", true); return; }
   $("ulamSide").value = fmt(side);
   $("ulamBuild").disabled = true; $("ulamCancel").hidden = false;
   U.progress.start("sieving " + fmt(side * side) + " numbers");
@@ -368,11 +368,10 @@ async function buildUlam(){
     U.bits = new Uint8Array(res.bits); U.dens = new Uint32Array(res.dens); U.R = res.R; U.densImg = null;
     U.stats = res;
     const hi = start + U.N - 1;
-    const expect = start === 1 ? Math.round(hi / Math.log(hi)) : null;
     statTiles($("ulamStats"), [
       ["Numbers", fmt(start) + " … " + fmt(hi) + "<small>" + fmt(side) + " × " + fmt(side) + " spiral</small>"],
       ["Primes", fmt(res.count), "big"],
-      ["Density", (100 * res.count / U.N).toFixed(2) + "%<small>" + (expect ? "N / ln N predicts " + fmt(expect) : "1 / ln N ≈ " + (100 / Math.log(hi)).toFixed(2) + "% at the edge") + "</small>"],
+      ["Density", (100 * res.count / U.N).toFixed(2) + "%<small>of the numbers drawn are prime</small>"],
       ["Twin prime pairs", fmt(res.twins)],
       ["Largest gap", fmt(res.gap) + (res.gap ? "<small>after " + fmt(res.gapAt) + "</small>" : "")],
       ["Drawn in", fmtMs(res.ms)]
@@ -408,7 +407,7 @@ async function primeTool(op){
   const s = n.toString();
   if (op === "count"){
     if (n < 0n || n > 10n ** 15n){
-      out.innerHTML = '<p class="hint">Counting needs about 16·√x bytes of memory, so it runs up to 10<sup>15</sup> — '
+      out.innerHTML = '<p class="hint">Counting works up to 10<sup>15</sup> — '
         + "past that it would need more memory than a browser tab gets.</p>";
       return;
     }
@@ -445,12 +444,8 @@ async function primeTool(op){
         $("ptInput").dataset.last = res.p;
       }
     } else if (op === "count"){
-      const x = Number(n), ln = Math.log(x);
-      let li = 0.5772156649015329 + Math.log(ln), term = 1;
-      for (let k = 1; k < 400; k++){ term *= ln / k; li += term / k; if (term / k < 1e-17 * li) break; }
-      html = '<div class="pt-verdict">π(' + fmt(x) + ") = " + fmt(res.count) + "</div>" + head
-        + '<div class="pt-num">x / ln x ≈ ' + fmt(Math.round(x / ln)) + " · li(x) ≈ " + fmt(Math.round(li))
-        + " — Gauss’s li(x) is off by only " + fmt(Math.round(li - res.count)) + "</div>";
+      html = '<div class="pt-verdict">' + fmt(res.count) + " primes</div>" + head
+        + '<div class="pt-num">from 2 up to ' + fmt(Number(n)) + "</div>";
     }
     out.innerHTML = '<div class="pt-result">' + html + "</div>";
   } catch (err){

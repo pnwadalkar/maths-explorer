@@ -167,7 +167,7 @@ function fractalSource(){
   return {
     kind: "fractal", w: FR_W, h: FR_H, pad: 0, free: true, minimap: false, maxScale: 1e18,
     title: { mandel: "Mandelbrot set", julia: "Julia set", ship: "Burning ship" }[FR.kind],
-    meta: FR.kind === "julia" ? "c = " + FR.jc[0].toFixed(5) + (FR.jc[1] < 0 ? " − " : " + ") + Math.abs(FR.jc[1]).toFixed(5) + "i" : "z → z² + c",
+    meta: "",
     filename: FR.kind + "-" + Date.now() + ".png",
     paint(ctx, s, vis, pz){
       if (!pz) return;
@@ -184,10 +184,6 @@ function fractalSource(){
         ctx.drawImage(img.canvas, -v.tx * kk, -v.ty * kk, v.W / v.k * kk, v.H / v.k * kk);
       }
       scheduleRender(pz);
-    },
-    probe(x, y){
-      const re = RE0 + x, im = IM0 - y;
-      return "c = " + re.toPrecision(10) + (im < 0 ? " − " : " + ") + Math.abs(im).toPrecision(10) + "i";
     },
     home(pz){
       const [W, H] = pz.size();
@@ -236,9 +232,7 @@ function setFractalKind(k){
   updateFrNote();
 }
 function updateFrNote(){
-  $("frNote").textContent = FR.kind === "julia"
-    ? "c = " + FR.jc[0].toFixed(5) + (FR.jc[1] < 0 ? " − " : " + ") + Math.abs(FR.jc[1]).toFixed(5) + "i"
-    : "zoom " + (FR.pz.s / 250).toPrecision(3) + "× · " + iterFor(FR.pz.s) + " iterations";
+  $("frNote").textContent = "zoom " + (FR.pz.s / 250).toPrecision(3) + "× · " + iterFor(FR.pz.s) + " iterations";
 }
 const FR_PLACES = {
   home: null,
@@ -251,11 +245,11 @@ const FR_PLACES = {
 function initFractal(){
   FR.pz = new PanZoom($("frStage"), {
     minimap: false,
-    onProbe: txt => { $("frHover").textContent = txt + (FR.kind === "mandel" ? "  ·  click to make this the Julia c" : ""); },
+    onProbe: () => { $("frHover").textContent = "Drag to pan · scroll to zoom · double-click to dive in" + (FR.kind === "mandel" ? " · click to pick a point for Julia" : ""); },
     onClick: (x, y) => {
       if (FR.kind !== "mandel") return;
       FR.jc = [RE0 + x, IM0 - y];
-      toast("Julia c set to " + FR.jc[0].toFixed(5) + (FR.jc[1] < 0 ? " − " : " + ") + Math.abs(FR.jc[1]).toFixed(5) + "i — switch to Julia to see it");
+      toast("Point picked — switch to Julia to see its shape");
     },
     onPaint: () => updateFrNote()
   });

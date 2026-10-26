@@ -1072,7 +1072,7 @@ function initMagic(){
   $("msqTrace").addEventListener("click", () => {
     if (!msq.ready) return;
     if (!msq.trace && msq.n * msq.n > TRACE_MAX_CELLS){
-      toast("The path needs a table of where every number sits — n² entries — so it is drawn up to order 4,096", true);
+      toast("The path can be drawn for squares up to 4,096 × 4,096", true);
       return;
     }
     msq.trace = !msq.trace;

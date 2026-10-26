@@ -1,11 +1,13 @@
 "use strict";
 /* ================= wiring ================= */
-const TOOLS = ["pi", "msq", "primes", "big", "fractal"];
+const TOOLS = ["pi", "num", "msq", "primes", "pascal", "big", "fractal"];
 const started = new Set();
 /* Each tool does its first piece of work the first time it is shown, so opening the
    page costs only the tool you land on. */
 const FIRST_RUN = {
   pi: () => computeConstant(),
+  num: () => exploreNumber(),
+  pascal: () => buildPascal(),
   msq: () => buildSquare(),
   primes: () => buildUlam(),
   big: () => runBig(),
@@ -61,6 +63,8 @@ initMagic();
 initPrimes();
 initBig();
 initFractal();
+initNumbers();
+initPascal();
 
 let startTool = location.hash.slice(1);
 if (!TOOLS.includes(startTool)){

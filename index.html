@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Maths Engine</title>
-<meta name="description" content="A workbench for mathematics you can see: digits of π and other constants, magic squares of any order, prime spirals, exact giant numbers and fractals — all computed in your browser.">
+<meta name="description" content="A workbench for mathematics you can see: digits of π, facts about any number, magic squares, prime spirals, Pascal’s triangle, exact giant numbers and fractals — all in your browser.">
 <script>
 /* Apply the stored theme before first paint so there is no flash. Dark is the default. */
 (function(){
@@ -52,12 +52,17 @@
   <nav class="tools" role="tablist" aria-label="Tools">
     <button role="tab" id="tab-pi" data-tool="pi" aria-selected="true" aria-controls="panel-pi">
       <span class="ticon">&pi;</span><span class="tlabel">Pi Explorer<small>&pi;, e, &phi;, &radic;2 to any length</small></span></button>
+    <button role="tab" id="tab-num" data-tool="num" aria-selected="false" aria-controls="panel-num">
+      <span class="ticon">42</span><span class="tlabel">Number Explorer<small>facts about any number</small></span></button>
     <button role="tab" id="tab-msq" data-tool="msq" aria-selected="false" aria-controls="panel-msq">
       <span class="ticon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"/></svg></span>
       <span class="tlabel">Magic Squares<small>any order, every line equal</small></span></button>
     <button role="tab" id="tab-primes" data-tool="primes" aria-selected="false" aria-controls="panel-primes">
       <span class="ticon"><svg viewBox="0 0 24 24" aria-hidden="true" class="dots"><circle cx="12" cy="12" r="1.6"/><circle cx="16" cy="8" r="1.6"/><circle cx="8" cy="16" r="1.6"/><circle cx="8" cy="8" r="1.6"/><circle cx="20" cy="4" r="1.6"/><circle cx="4" cy="20" r="1.6"/><circle cx="16" cy="16" r="1.6"/><circle cx="4" cy="8" r="1.6"/><circle cx="20" cy="16" r="1.6"/></svg></span>
       <span class="tlabel">Primes<small>Ulam spiral, tests, factors</small></span></button>
+    <button role="tab" id="tab-pascal" data-tool="pascal" aria-selected="false" aria-controls="panel-pascal">
+      <span class="ticon"><svg viewBox="0 0 24 24" aria-hidden="true" class="dots"><circle cx="12" cy="4.5" r="1.9"/><circle cx="8.2" cy="11" r="1.9"/><circle cx="15.8" cy="11" r="1.9"/><circle cx="4.4" cy="17.5" r="1.9"/><circle cx="12" cy="17.5" r="1.9"/><circle cx="19.6" cy="17.5" r="1.9"/></svg></span>
+      <span class="tlabel">Pascal&rsquo;s Triangle<small>patterns hiding in numbers</small></span></button>
     <button role="tab" id="tab-big" data-tool="big" aria-selected="false" aria-controls="panel-big">
       <span class="ticon">n!</span><span class="tlabel">Big Numbers<small>exact n!, Fibonacci, powers</small></span></button>
     <button role="tab" id="tab-fractal" data-tool="fractal" aria-selected="false" aria-controls="panel-fractal">
@@ -158,6 +163,64 @@
     </div>
   </section>
 
+  <!-- ===================================================== NUMBER EXPLORER -->
+  <section id="panel-num" class="panel" role="tabpanel" aria-labelledby="tab-num" hidden>
+    <div class="intro">
+      <h2>Tell me about <em>any number</em></h2>
+      <p>Type a whole number and see what makes it interesting: its factors, what kind of number it is,
+        other ways to write it, and the path it takes in the famous 3n&nbsp;+&nbsp;1 game.</p>
+    </div>
+
+    <div class="card controls">
+      <div class="field">
+        <label class="flabel" for="nxInput">Number</label>
+        <input type="text" id="nxInput" inputmode="numeric" value="2026" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <span class="flabel">Try</span>
+        <div class="chips" id="nxPresets">
+          <button type="button" data-n="12">12</button>
+          <button type="button" data-n="28">28</button>
+          <button type="button" data-n="153">153</button>
+          <button type="button" data-n="1729">1729</button>
+          <button type="button" data-n="65537">65537</button>
+          <button type="button" data-n="surprise" class="surprise">Surprise me</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="nxGo" type="button">Explore</button>
+      </div>
+    </div>
+
+    <dl class="stats" id="nxStats"></dl>
+
+    <div class="figure">
+      <div class="card">
+        <div class="card-head"><h3>What kind of number is it?</h3></div>
+        <div class="kinds" id="nxKinds"></div>
+      </div>
+      <div class="side">
+        <div class="card">
+          <div class="card-head"><h3>Other ways to write it</h3></div>
+          <dl class="facts" id="nxWays"></dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Divisors</h3><span class="note" id="nxDivNote">&mdash;</span></div>
+      <div class="factors divs" id="nxDivs"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>The 3n + 1 game</h3><span class="note" id="nxCollatzNote">&mdash;</span></div>
+      <p class="lede">If the number is even, halve it. If it is odd, triple it and add 1. Repeat. Every number anyone
+        has ever tried ends up at 1 &mdash; but nobody has been able to prove that they all do.</p>
+      <div class="chart" id="nxChartBox"><canvas id="nxChart" role="img" aria-label="The numbers visited on the way to 1"></canvas>
+        <div class="tip" id="nxTip" hidden></div></div>
+    </div>
+  </section>
+
   <!-- ===================================================== MAGIC SQUARES -->
   <section id="panel-msq" class="panel" role="tabpanel" aria-labelledby="tab-msq" hidden>
     <div class="intro">
@@ -202,7 +265,7 @@
         <div class="btnrow">
           <button class="ghost" type="button" id="msqRotate" title="Rotate 90° clockwise">&#8635; Rotate</button>
           <button class="ghost" type="button" id="msqMirror" title="Mirror left to right">&#8644; Mirror</button>
-          <button class="ghost" type="button" id="msqComplement" aria-pressed="false" title="Replace every v with n²+1−v">&#9680; Complement</button>
+          <button class="ghost" type="button" id="msqComplement" aria-pressed="false" title="Swap the smallest number with the largest, the second smallest with the second largest, and so on">&#9680; Complement</button>
           <button class="ghost" type="button" id="msqShuffle" title="A random one of the 16 variants">&#9861; Random variant</button>
           <button class="ghost" type="button" id="msqReset">Reset</button>
         </div>
@@ -219,7 +282,7 @@
       <div class="field">
         <span class="flabel">Overlay</span>
         <div class="seg" role="group" aria-label="Overlays">
-          <button type="button" id="msqTrace" aria-pressed="false" title="Draw the path 1 → 2 → 3 → …">Path 1&rarr;n&sup2;</button>
+          <button type="button" id="msqTrace" aria-pressed="false" title="Join the numbers in order: 1, 2, 3 …">Path 1, 2, 3&hellip;</button>
           <button type="button" id="msqLines" aria-pressed="true" title="Highlight the row and column under the pointer, with their sums">Line sums</button>
         </div>
       </div>
@@ -276,8 +339,7 @@
     <div class="intro">
       <h2>The Ulam spiral, and <em>prime tools</em></h2>
       <p>Write the counting numbers in a square spiral and light up the primes: they gather on
-        diagonals nobody expected. Start the spiral at 41 to see Euler&rsquo;s n&sup2;&nbsp;+&nbsp;n&nbsp;+&nbsp;41
-        run down one long unbroken line.</p>
+        diagonals nobody expected. Start the spiral at 41 and one long unbroken line of primes appears.</p>
     </div>
 
     <div class="card controls">
@@ -347,6 +409,88 @@
     </div>
   </section>
 
+  <!-- ===================================================== PASCAL'S TRIANGLE -->
+  <section id="panel-pascal" class="panel" role="tabpanel" aria-labelledby="tab-pascal" hidden>
+    <div class="intro">
+      <h2>Pascal&rsquo;s triangle, <em>and its hidden patterns</em></h2>
+      <p>Start with a 1 at the top. Every other number is the two numbers above it added together.
+        Simple &mdash; yet colour it in and whole pictures appear.</p>
+    </div>
+
+    <div class="card controls">
+      <div class="field">
+        <label class="flabel" for="pasRows">Rows</label>
+        <input type="text" id="pasRows" inputmode="numeric" value="16" autocomplete="off" spellcheck="false" class="narrow">
+      </div>
+      <div class="field">
+        <span class="flabel">Quick pick</span>
+        <div class="chips" id="pasPresets">
+          <button type="button" data-n="8">8</button>
+          <button type="button" data-n="16">16</button>
+          <button type="button" data-n="32">32</button>
+          <button type="button" data-n="64">64</button>
+          <button type="button" data-n="256">256</button>
+          <button type="button" data-n="1024">1024</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="pasBuild" type="button">Draw</button>
+      </div>
+    </div>
+
+    <div class="card controls slim">
+      <div class="field">
+        <span class="flabel">Colour</span>
+        <div class="seg wrap" role="group" aria-label="Colouring" id="pasColour">
+          <button type="button" data-m="2" aria-pressed="true">Odd / even</button>
+          <button type="button" data-m="3" aria-pressed="false">Multiples of 3</button>
+          <button type="button" data-m="5" aria-pressed="false">Multiples of 5</button>
+          <button type="button" data-m="7" aria-pressed="false">Multiples of 7</button>
+          <button type="button" data-m="size" aria-pressed="false">Size</button>
+        </div>
+      </div>
+      <div class="field">
+        <span class="flabel">Highlight</span>
+        <div class="seg wrap" role="group" aria-label="Highlight" id="pasHl">
+          <button type="button" data-h="none" aria-pressed="true">Nothing</button>
+          <button type="button" data-h="count" aria-pressed="false">1, 2, 3, 4&hellip;</button>
+          <button type="button" data-h="tri" aria-pressed="false">1, 3, 6, 10&hellip;</button>
+        </div>
+      </div>
+    </div>
+
+    <dl class="stats" id="pasStats"></dl>
+
+    <div class="figure">
+      <div class="card">
+        <div class="card-head"><h3>Pascal&rsquo;s triangle</h3><span class="note" id="pasNote">&mdash;</span>
+          <span class="sp"></span>
+          <button class="ghost small" type="button" id="pasFull">Full screen</button>
+          <button class="ghost small" type="button" id="pasSave">Save PNG</button></div>
+        <div class="stage tall" id="pasStage"><canvas id="pasCanvas" role="img" aria-label="Pascal's triangle"></canvas>
+          <div class="stage-tools"><button type="button" data-z="out" aria-label="Zoom out">&minus;</button><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <p class="hint" id="pasHover">Point at a number to see which two numbers above add up to it.</p>
+      </div>
+      <div class="side">
+        <div class="card">
+          <div class="card-head"><h3>Colours</h3></div>
+          <div class="keys" id="pasKey"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Things to spot</h3></div>
+          <dl class="facts">
+            <div><dt>Every row adds up to a power of 2</dt><dd>1, 2, 4, 8, 16, 32&hellip; &mdash; each row doubles the one before.</dd></div>
+            <div><dt>Counting numbers and triangle numbers</dt><dd>The second diagonal counts 1, 2, 3, 4&hellip;; the third gives 1, 3, 6, 10&hellip; Use Highlight to see them.</dd></div>
+            <div><dt>A triangle made of triangles</dt><dd>Light up only the odd numbers and draw 256 rows: the Sierpi&nacute;ski triangle appears.</dd></div>
+            <div><dt>Powers of 11</dt><dd>Row 4 is 1 4 6 4 1, and 11 &times; 11 &times; 11 &times; 11 = 14641.</dd></div>
+            <div><dt>It&rsquo;s symmetrical</dt><dd>Every row reads the same from either end.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================================================== BIG NUMBERS -->
   <section id="panel-big" class="panel" role="tabpanel" aria-labelledby="tab-big" hidden>
     <div class="intro">
@@ -408,9 +552,8 @@
   <section id="panel-fractal" class="panel" role="tabpanel" aria-labelledby="tab-fractal" hidden>
     <div class="intro">
       <h2>The Mandelbrot set, <em>and its Julias</em></h2>
-      <p>One rule &mdash; z &rarr; z&sup2; + c, repeated &mdash; and an infinitely intricate coastline.
-        Drag to explore, scroll to dive. Every Julia set is a single point of the Mandelbrot set:
-        switch to Julia and the point you last clicked becomes its c.</p>
+      <p>One simple rule, repeated, draws an endlessly detailed edge. Drag to explore, scroll to dive.
+        Click a point, then switch to Julia to see the shape that belongs to it.</p>
     </div>
 
     <div class="card controls slim">
@@ -494,6 +637,8 @@
 <script src="js/primes.js"></script>
 <script src="js/bignum.js"></script>
 <script src="js/fractal.js"></script>
+<script src="js/numexp.js"></script>
+<script src="js/pascal.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

@@ -73,11 +73,11 @@ function bigWorker(){
 
 /* ================= big numbers: the page ================= */
 const BIG_OPS = {
-  fact:      { a: "n", def: ["1000"], name: (a) => a + "!", what: "the product 1 × 2 × … × n" },
+  fact:      { a: "n", def: ["1000"], name: (a) => a + "!", what: "every whole number up to n, multiplied together" },
   fib:       { a: "n", def: ["10000"], name: (a) => "F(" + a + ")", what: "the n-th Fibonacci number" },
   pow:       { a: "a (base)", b: "b (exponent)", def: ["2", "1000"], name: (a, b) => a + "^" + b, what: "a multiplied by itself b times" },
   binom:     { a: "n", b: "k", def: ["1000", "500"], name: (a, b) => "C(" + a + ", " + b + ")", what: "ways to choose k of n" },
-  catalan:   { a: "n", def: ["1000"], name: (a) => "Catalan(" + a + ")", what: "C(2n, n) / (n + 1)" },
+  catalan:   { a: "n", def: ["1000"], name: (a) => "Catalan(" + a + ")", what: "ways to match up n pairs of brackets" },
   primorial: { a: "n", def: ["10000"], name: (a) => a + "#", what: "the product of every prime ≤ n" }
 };
 const BG = { op: "fact", s: "", label: "", job: new Job(bigWorker), stream: null, progress: null };
@@ -141,7 +141,7 @@ function renderBig(res){
     ["Value", BG.label + "<small>" + BIG_OPS[BG.op].what + "</small>"],
     ["Digits", fmt(n), "big"],
     ["Approximately", sci],
-    ["Digit sum", fmt(sum) + "<small>" + (sum % 9 === 0 ? "divisible by 9" : sum % 3 === 0 ? "divisible by 3" : "remainder " + (sum % 9) + " mod 9") + "</small>"],
+    ["Digit sum", fmt(sum) + "<small>" + (sum % 9 === 0 ? "divisible by 9" : sum % 3 === 0 ? "divisible by 3" : "not divisible by 3") + "</small>"],
     ["Trailing zeros", fmt(tz)],
     ["Computed in", fmtMs(res.ms) + "<small>" + fmtMs(res.tCompute) + " arithmetic, the rest writing decimals</small>"]
   ]);

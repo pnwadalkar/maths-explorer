@@ -284,7 +284,7 @@ function walkSource(){
   return {
     w: walk.w, h: walk.h, maxScale: 400, minimap: true,
     title: "Random walk of " + fmt(n) + " digits of " + CONSTS[K.c].name,
-    meta: "digit d steps at d × 36° · ends " + walk.dist.toFixed(1) + " steps from the start (√n ≈ " + Math.sqrt(n).toFixed(1) + ")",
+    meta: "ends " + walk.dist.toFixed(1) + " steps from the start",
     filename: CONSTS[K.c].title + "-" + n + "-walk.png",
     paint(ctx, s, vis){
       if (walk.raster){
@@ -379,18 +379,18 @@ function renderConstPage(){
   statTiles($("piStats"), [
     ["Decimal places", fmt(n), "big"],
     ["Computed in", fmtMs(K.ms)],
-    ["Digit sum", fmt(st.sum) + "<small>mean " + (st.sum / n).toFixed(4) + " (4.5 if uniform)</small>"],
+    ["Digit sum", fmt(st.sum) + "<small>average digit " + (st.sum / n).toFixed(2) + "</small>"],
     ["Last place", "#" + fmt(n) + " is " + K.digits[n - 1]]
   ]);
   renderLegend($("piLegend"), st.counts, dg => K.mode === "colour" ? PALETTE[dg] : GREYS[dg]);
-  $("piChi").textContent = "χ² = " + st.chi.toFixed(2) + ", p ≈ " + st.p.toFixed(2);
+  $("piChi").textContent = st.p < 0.01 ? "uneven spread" : "even spread";
   const runDigit = K.digits[st.bestAt];
   $("piFacts").innerHTML = [
     ["Longest run of one digit", "<b>" + runDigit.repeat(Math.min(st.best, 24)) + "</b>" + (st.best > 24 ? "…" : "")
       + " — " + st.best + " in a row, starting at place " + fmt(st.bestAt + 1)],
     ["Do the digits look random?", st.p < 0.01
-      ? "χ² p ≈ " + st.p.toFixed(3) + " — lopsided at this length"
-      : "χ² p ≈ " + st.p.toFixed(2) + " — consistent with every digit equally likely"],
+      ? "Not quite — some digits turn up more often than others at this length"
+      : "Yes — every digit turns up about equally often"],
     ["Most and least frequent", most + " (" + fmt(st.counts[most]) + ") and " + least + " (" + fmt(st.counts[least]) + ")"],
     ["First 50 places", K.intPart + "." + K.digits.slice(0, 50)]
   ].map(([k, v]) => "<div><dt>" + k + "</dt><dd>" + v + "</dd></div>").join("");
